@@ -1,0 +1,47 @@
+<ScrollView height="100%">
+    <ActionBar title="" actionBarHidden="true" style="background-color: black;"></ActionBar>
+    <GridLayout columns="*" rows="*, *, *, *, *, *, *" style="background-color: black;">
+        <ActivityIndicator rowSpan="7" color="red" [busy]="onProccess" width="100" height="100"></ActivityIndicator>
+        <GridLayout class="m-t-25" row="2" rowspan="2">
+            <Image src="https://patrikfreisner.github.io/primum_mainpage/white_logo.png" class="action-image m-r-5"
+                width="200" height="200"></Image>
+        </GridLayout>
+
+        <StackLayout row="4">
+            <Label class="h3" textAlignment="center" text="Bem vindo ao registro de novos usuarios Primum!"
+                style="color: white;"></Label>
+        </StackLayout>
+        <!-- <GridLayout class="loginInput" row="5" rowspan="2" rows="*, *, *, *, *, *, *">
+            <TextField class="m-15" row="1" rowSpan="2" hint="Digite o Login" autocorrect="false" lineHeight="25" keyboardType="email" [text]='name'></TextField>
+            <TextField class="m-15" row="3" rowSpan="2" hint="Digite sua senha" secure="true" [text]='name'></TextField>
+            <button class="-default" row="5" rowSpan="2" text="Login" (tap)="sendLogin()"></button>
+        </GridLayout>
+        <GridLayout row="9">
+            <label text="Primum Tecnologia - 2020" style="color: white;"></label>
+        </GridLayout> -->
+        <StackLayout class="form loginInput" row="5" rowspan="2">
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite o Login" autocorrect="false" lineHeight="25" keyboardType="email"
+                [(ngModel)]='registrationUser.email'>
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite sua senha" secure="true" [(ngModel)]="registrationUser.password">
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Confirme sua senha" secure="true" [(ngModel)]="registrationUser.confirmpassword">
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite seu nome" autocorrect="false" [(ngModel)]="registrationUser.name">
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite seu nome de usuario Primum!" autocorrect="false"
+                [(ngModel)]="registrationUser.nickname"></TextField>
+            </StackLayout>
+            <Button text="Registrar" (tap)="onRegister()" class="btn btn-primary"></Button>
+        </StackLayout>
+    </GridLayout>
+</ScrollView>

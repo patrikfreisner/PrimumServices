@@ -1,0 +1,19 @@
+// Import common styles
+@import "app-common";
+
+// Place any CSS rules you want to apply only on Android here
+
+
+#MainLabelId {
+    color: white;
+}
+
+#MainActionBar {
+    background-color: black;
+}
+
+.sublayoutmenu {
+    background-color: #e8e8e8;
+    border-width: 5px;
+    border-color: #c1c1c1;
+}

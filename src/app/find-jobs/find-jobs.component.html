@@ -1,0 +1,43 @@
+<ActionBar id="MainActionBar" title="PrimumServices" class="p-t-1 p-b-1">
+    <NavigationButton (tap)="goBack()" android.systemIcon="ic_menu_back" style="color: white;"></NavigationButton>
+    <StackLayout orientation="horizontal">
+        <Image src="https://patrikfreisner.github.io/primum_mainpage/white_logo.png" class="action-image m-r-5"
+            width="25" height="25" [nsRouterLink]="['/home']"></Image>
+        <!-- <Label id="MainLabelId" text="PrimumServices!" class="h3"></Label> -->
+    </StackLayout>
+    <ActionItem tap="onDelete" android.systemIcon="ic_input_get" text="delete"></ActionItem>
+</ActionBar>
+<ScrollView orientation="vertical">
+    <StackLayout orientation="vertical">
+        <GridLayout class="p-4" height="35">
+            <Label text="Abaixo as empresas que prestam serviço na sua localidade:" fontSize="14"></Label>
+        </GridLayout>
+        <GridLayout *ngFor="let src of resourceData" class="m-2 p-3"
+            style="border-width: 2px; border-color: black; border-radius: 15px;" columns="*, *, *, *"
+            rows="auto, auto, auto, auto" verticalAlignment="top" backgroundColor="lightgray" max-height="35px"
+            (tap)="navigateTo(src.company_uuid)">
+
+            <Image
+                src="{{src.iconSrc || 'https://w7.pngwing.com/pngs/340/956/png-transparent-profile-user-icon-computer-icons-user-profile-head-ico-miscellaneous-black-desktop-wallpaper.png'}}"
+                height="140px" col="0" row="0" rowSpan="4" stretch="aspectFit" verticalAlignment="center"
+                style="border-radius: 15px; padding: 5px 0px;">
+            </Image>
+
+            <Label text="{{src.companyName || ''}}" col="1" row="0" colSpan="4" fontSize="20"
+                style="margin-left: 25px;"></Label>
+            <Label *ngIf="src.address != null" text="{{src.address.street}}, {{src.address.city}}." col="1" colSpan="4"
+                row="1" fontSize="10" style="margin-left: 25px;"></Label>
+            <Label text="{{src.quantityCount || ''}}" col="1" colSpan="4" row="2" fontSize="10" style="margin-left: 25px;"></Label>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>
+<!-- <Label class="h2" text="Data" horizontalAlignment="center" verticalAlignment="center"></Label> -->
+
+<!-- ///////////////////////////////// -->
+<!-- <StackLayout style="z-index: -1; background-color: gray;" margin="24" horizontalAlignment="center" verticalAlignment="center">
+    <Label [text]="prompt"></Label>
+    <StackLayout orientation="horizontal" marginTop="12">
+        <Button text="ok" (tap)="close('OK')"></Button>
+        <Button text="cancel" (tap)="close('Cancel')"></Button>
+    </StackLayout>
+</StackLayout> -->

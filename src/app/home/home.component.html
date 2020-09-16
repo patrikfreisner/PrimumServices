@@ -1,0 +1,50 @@
+<ActionBar id="MainActionBar" title="PrimumServices" class="p-t-1 p-b-1">
+    <StackLayout orientation="horizontal">
+        <Image src="https://patrikfreisner.github.io/primum_mainpage/white_logo.png" class="action-image m-r-5"
+            width="25" height="25"></Image>
+        <!-- <Label id="MainLabelId" text="PrimumServices!" class="h3"></Label> -->
+    </StackLayout>
+</ActionBar>
+<BottomNavigation class="page">
+    <TabContentItem>
+        <GridLayout class="p-10" columns="*, *" rows="*, *, *, *, *, *, *">
+            <label class="h2" row="0" colSpan="2" text="Olá, {{username}}" textAlignment="center"></label>
+            <button col="0" row="1" colSpan="2" height="50%" text="Procurar serviços"
+                [nsRouterLink]="['/services']"></button>
+            <button class="btn-primary" col="0" row="2" rowSpan="1" height="50%" text="Meus orçamentos"></button>
+            <button col="1" row="2" rowSpan="1" height="50%" text="Scannear loja"></button>
+            <!-- SubLayout -->
+            <GridLayout class="sublayoutmenu m-5" colSpan="2" row="3" rowSpan="4" borderRadius="10%">
+                <label class="h3" row="0" colSpan="2" text="Meus serviços ativos: " textAlignment="center"></label>
+            </GridLayout>
+        </GridLayout>
+    </TabContentItem>
+
+    <TabContentItem>
+        <GridLayout>
+            <label class="h3 m-t-10" text="Seus ultimos serviços estão aqui :)" textAlignment="center"></label>
+        </GridLayout>
+    </TabContentItem>
+
+    <TabContentItem>
+        <GridLayout>
+            <label class="h3 m-t-10" text="Configurações virão aqui :)" textAlignment="center"></label>
+            <button text="Sair da conta :(" (tap)="logout()"></button>
+        </GridLayout>
+    </TabContentItem>
+
+    <TabStrip>
+        <TabStripItem class="navigation__item">
+            <Label text="Home"></Label>
+            <Image src="font://&#xf015;" class="fas t-36"></Image>
+        </TabStripItem>
+        <TabStripItem class="navigation__item">
+            <Label text="Histórico"></Label>
+            <Image src="font://&#xf1ea;" class="far t-36"></Image>
+        </TabStripItem>
+        <TabStripItem class="navigation__item">
+            <Label text="Configurações"></Label>
+            <Image src="font://&#xf002;" class="fas t-36"></Image>
+        </TabStripItem>
+    </TabStrip>
+</BottomNavigation>

@@ -1,0 +1,42 @@
+<!-- <ScrollView height="100%"> -->
+    <ActionBar title="" actionBarHidden="true" style="background-color: black;"></ActionBar>
+    <GridLayout columns="*" rows="*, *, *, *, *, *, *" style="background-color: black;">
+        <ActivityIndicator rowSpan="7" color="red" [busy]="onProccess" width="100" height="100"></ActivityIndicator>
+        <StackLayout row="0">
+            <Label class="h3" text="Bem vindos a nova era de serviços!" style="color: white;"
+                textAlignment="center"></Label>
+            <Label (tap)="goToPrimumWebPage()" class="h3" style="color: white;" textAlignment="center">
+                <FormattedString>
+                    <Span text="...conheça a"></Span>
+                    <Span text=" Primum " color="red"></Span>
+                    <Span text=";)"></Span>
+                </FormattedString>
+            </Label>
+        </StackLayout>
+        <GridLayout class="m-t-25" row="1" rowspan="2">
+            <Image src="https://patrikfreisner.github.io/primum_mainpage/white_logo.png" class="action-image m-r-5"
+                width="200" height="200"></Image>
+        </GridLayout>
+
+        <Label class="h3 m-t-25" row="3" textAlignment="center" text="Faça login na Primum ;)"
+            style="color: white;"></Label>
+        <StackLayout class="form loginInput" row="4" rowspan="3">
+            <StackLayout class="input-field m-t-15">
+                <TextField required class="input" hint="Digite o Login" autocorrect="false" lineHeight="25"
+                    keyboardType="email" [(ngModel)]="loginUser.email" disabled="{{isBusy}}"></TextField>
+            </StackLayout>
+
+            <StackLayout class="input-field m-t-15">
+                <TextField required class="input" hint="Digite sua senha" secure="true" [(ngModel)]="loginUser.password"
+                    disabled="{{isBusy}}"></TextField>
+            </StackLayout>
+            <Button text="Login" (tap)="onLogin()" class="btn btn-primary" isEnabled="{{!isBusy}}"></Button>
+            <Label (tap)="goToRegistration()" class="h4" style="color: black;" text="Não tem uma conta? Registre-se!"
+                textAlignment="center"></Label>
+        </StackLayout>
+    </GridLayout>
+<!-- </ScrollView> -->
+<AbsoluteLayout class="border-props" [class.hidden]="!isBusy" height="25%" width="70%"
+    backgroundColor="rgba(128,128,128,0.7)">
+</AbsoluteLayout>
+<ActivityIndicator width="100" height="100" [busy]="isBusy"></ActivityIndicator>

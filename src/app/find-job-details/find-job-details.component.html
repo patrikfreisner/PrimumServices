@@ -1,0 +1,46 @@
+<ActionBar id="MainActionBar" title="PrimumServices" class="p-t-1 p-b-1">
+    <NavigationButton (tap)="goBack()" android.systemIcon="ic_menu_back" style="color: white;"></NavigationButton>
+    <StackLayout orientation="horizontal">
+        <Image src="https://patrikfreisner.github.io/primum_mainpage/white_logo.png" class="action-image m-r-5"
+            width="25" height="25" [nsRouterLink]="['/home']"></Image>
+    </StackLayout>
+</ActionBar>
+
+<StackLayout>
+    <GridLayout class="m-t-5" columns="*, *, *, *, *, *, *, *, *" rows="auto, auto, auto, auto"
+        style="margin-top: 5px; margin-bottom: 5px;">
+        <DockLayout col="0" colSpan="3" row="0" rowSpan="4"
+            style="border-radius: 15px; padding: 5px; margin: 5px 20px; background-color: #c4c4c4; border-width: 1px; border-color: #ababab;">
+            <Image
+                src="{{selectedCompany.iconSrc || 'https://w7.pngwing.com/pngs/340/956/png-transparent-profile-user-icon-computer-icons-user-profile-head-ico-miscellaneous-black-desktop-wallpaper.png'}}"
+                height="140px" stretch="aspectFit" verticalAlignment="center">
+            </Image>
+        </DockLayout>
+        <Label text="{{selectedCompany.companyName || ''}}" fontSize="20" class="btn btn-primary"
+            horizontalAlignment="left" col="3" colSpan="6" row="0" rowSpan="2"></Label>
+        <Label *ngIf="selectedCompany.address != null"
+            text="{{selectedCompany.address.street}}, {{selectedCompany.address.city}}." fontSize="12"
+            class="btn btn-primary" horizontalAlignment="left" col="3" colSpan="6" row="2"></Label>
+        <Label text="{{selectedCompany.phone}}" fontSize="12" class="btn btn-primary" horizontalAlignment="left" col="3"
+            colSpan="6" row="3"></Label>
+    </GridLayout>
+    <DockLayout class="m-t-3 m-b-3" style="width: 80%; padding: 1px; background-color: rgb(165, 165, 165);">
+    </DockLayout>
+    <StackLayout class="m-5" style="padding-left: 15%; padding-right: 15%;">
+        <GridLayout *ngFor="let src of servicesData" class="m-2 p-5"
+            style="border-width: 2px; border-color: black; border-radius: 15px;" columns="*, *, *, *"
+            rows="auto, auto, auto, auto, auto, auto" verticalAlignment="top" backgroundColor="lightgray"
+            max-height="35px">
+
+            <Label text="{{src.title || ''}}" col="0" row="0" colSpan="3" fontSize="18"></Label>
+            <Label text="Tx. entrega R${{src.delivery_tax || ''}}" col="0" colSpan="2" row="1" fontSize="14"></Label>
+            <Label text="Tipo: {{src.service_type || ''}}" col="0" row="2" colSpan="2" fontSize="14"></Label>
+            <Label text="Tempo de entrega: {{src.deadline || ''}}" col="2" row="2" colSpan="2" fontSize="14"></Label>
+
+
+            <Label text="{{src.quality_count || ''}}" col="3" colSpan="1" row="0" fontSize="14"></Label>
+
+            <Label text="Valor R${{src.price || ''}}" col="2" colSpan="2" row="1" fontSize="14"></Label>
+        </GridLayout>
+    </StackLayout>
+</StackLayout>
