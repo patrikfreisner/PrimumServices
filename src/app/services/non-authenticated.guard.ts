@@ -12,7 +12,9 @@ export class NonAuthenticatedGuard implements CanActivate {
     private cUtil: CognitoService,
     private router: Router
   ) { }
-
+// canActivate chamando uma função externa não pode retornar router.urlTree ou etc.
+// Tentar realizar todas as ações dentro do canActivate ou então habilitar a função
+// isAuthenticated para retornal urlTree;
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
