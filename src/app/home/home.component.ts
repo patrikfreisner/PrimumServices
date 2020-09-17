@@ -4,25 +4,28 @@ import { formatDate } from '@angular/common';
 
 import { UserLoginService } from "../services/user-login.service";
 import { RouterExtensions } from "nativescript-angular";
+import { CognitoService } from "../services/cognito.service";
 
 @Component({
     selector: "Home",
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-    username = "Patrik Reisner"
-    jobName = "\"WEG S.A\""
+    public currentUser: any;
     constructor(
         public userLoginService: UserLoginService,
+        public cUtil: CognitoService,
         public router: RouterExtensions
     ) { }
 
     ngOnInit(): void {
+        this.currentUser = this.cUtil.getUserData();
+        console.log(this.currentUser);
     }
 
     logout() {
         this.userLoginService.logout();
-        this.router.navigate(["/login"],{ clearHistory: true });
+        this.router.navigate(["/login"], { clearHistory: true });
     }
 
     alertOptions: AlertOptions = {

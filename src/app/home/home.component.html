@@ -8,7 +8,7 @@
 <BottomNavigation class="page">
     <TabContentItem>
         <GridLayout class="p-10" columns="*, *" rows="*, *, *, *, *, *, *">
-            <label class="h2" row="0" colSpan="2" text="Olá, {{username}}" textAlignment="center"></label>
+            <label class="h2" row="0" colSpan="2" text="Olá, {{currentUser.name}}" textAlignment="center"></label>
             <button col="0" row="1" colSpan="2" height="50%" text="Procurar serviços"
                 [nsRouterLink]="['/services']"></button>
             <button class="btn-primary" col="0" row="2" rowSpan="1" height="50%" text="Meus orçamentos"></button>
