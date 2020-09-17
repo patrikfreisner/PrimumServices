@@ -1,0 +1,30 @@
+/* Add mobile styles for the component here.  */
+
+.loginInput {
+    margin: 50px 70px 0px 70px;
+    border: 2px solid black;
+    border-radius: 25px;
+    background-color: #e8e8e8;
+}
+
+.page {
+    align-items: center;
+    flex-direction: column;
+}
+
+.form {
+    margin-left: 30;
+    margin-right: 30;
+    flex-grow: 2;
+    vertical-align: middle;
+}
+
+.border-props {
+    border-width: 1;
+    border-color: white;
+    border-radius: 20;
+}
+
+.hidden {
+    display: none;
+}

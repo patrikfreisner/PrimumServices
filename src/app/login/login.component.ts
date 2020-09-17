@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterExtensions } from "nativescript-angular/router";
 import * as utilsModule from "tns-core-modules/utils/utils";
 import { alert } from "tns-core-modules/ui/dialogs";
@@ -45,16 +45,12 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
     }
   }
 
-  goToPrimumWebPage() {
-    utilsModule.openUrl("http://www.primumtec.com");
+  goTo(urlToGo) {
+    utilsModule.openUrl(urlToGo);
   }
 
-  goToRegistration() {
-    this.routerExtensions.navigate(["/registration"]);
-  }
-
-  sendLogin() {
-    this.routerExtensions.navigate(["/home"]);
+  goToLocal(urlToGo) {
+    this.routerExtensions.navigate([urlToGo]);
   }
 
   cognitoCallback(message: string, result: any) {
@@ -69,25 +65,17 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
         alert(options);
       }
       this.isBusy = false;
-    } else { //success
-      // console.log("in callback...result: " + result);
-      // console.log(result);
-      this.userLogged = this.cognitoCustomAttrToJson(result.idToken.payload);
+    } else {
+      this.userLogged = result.idToken.payload;
       this.isBusy = false;
-      this.sendLogin();
+      this.goToLocal('/home');
     }
   }
 
   isLoggedInCallback(message: string, isLoggedIn: boolean) {
     if (isLoggedIn) {
-      this.userLogged = this.cognitoCustomAttrToJson(this.cUtil.getUserData());
-      this.sendLogin();
+      this.userLogged = this.cUtil.getUserData();
+      this.goToLocal('/home');
     }
-  }
-
-  cognitoCustomAttrToJson(payload) {
-    var jsonData = JSON.stringify(payload);
-    jsonData = jsonData.replace(new RegExp('custom:', 'g'), '');
-    return JSON.parse(jsonData);
   }
 }

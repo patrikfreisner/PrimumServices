@@ -32,6 +32,7 @@ export class NonAuthenticatedGuard implements CanActivate {
         } else {
           if (session.isValid()) {
             console.log("Cant allow you to pass! -------------------");
+            routerC.parseUrl('/home');
             userIsAllowed = false;
           }
         }
