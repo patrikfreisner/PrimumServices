@@ -1,7 +1,18 @@
 /* Add mobile styles for the component here.  */
+
 .loginInput {
     margin: 50px 70px 0px 70px;
     border: 2px solid black;
     border-radius: 25px;
     background-color: #e8e8e8;
+}
+
+.hasError {
+    border-bottom-color:red;
+    border-bottom-width: 3px
+}
+
+.hasSuccess {
+    border-bottom-color: lightgreen;
+    border-bottom-width: 2px;
 }

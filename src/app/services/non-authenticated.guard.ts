@@ -12,20 +12,27 @@ export class NonAuthenticatedGuard implements CanActivate {
     private cUtil: CognitoService,
     private router: Router
   ) { }
-// canActivate chamando uma função externa não pode retornar router.urlTree ou etc.
-// Tentar realizar todas as ações dentro do canActivate ou então habilitar a função
-// isAuthenticated para retornal urlTree;
+  // canActivate chamando uma função externa não pode retornar router.urlTree ou etc.
+  // Tentar realizar todas as ações dentro do canActivate ou então habilitar a função
+  // isAuthenticated para retornal urlTree;
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.isAuthenticated();
+    let returnetValue: any;
+
+    if (this.isAuthenticated()) {
+      returnetValue = true;
+    } else {
+      returnetValue = this.router.parseUrl("/home");
+    }
+
+    return returnetValue;
   }
 
   isAuthenticated(): boolean {
     console.log("Inside NonAuthGuard");
     let userIsAllowed = true;
     let cognitoUser = this.cUtil.getCurrentUser();
-    let routerC = this.router;
 
     if (cognitoUser != null) {
       cognitoUser.getSession(function (err, session) {
@@ -34,7 +41,6 @@ export class NonAuthenticatedGuard implements CanActivate {
         } else {
           if (session.isValid()) {
             console.log("Cant allow you to pass! -------------------");
-            routerC.parseUrl('/home');
             userIsAllowed = false;
           }
         }

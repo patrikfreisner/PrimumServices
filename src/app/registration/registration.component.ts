@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserRegistrationService } from '../services/user-registration.service';
-import { CognitoCallback, RegistrationUser } from "../services/cognito.service";
+import { CognitoCallback } from "../services/cognito.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouterExtensions } from 'nativescript-angular';
+
+import { confirm } from "tns-core-modules/ui/dialogs";
 
 @Component({
   selector: 'ns-registration',
@@ -9,34 +13,50 @@ import { CognitoCallback, RegistrationUser } from "../services/cognito.service";
 })
 export class RegistrationComponent implements CognitoCallback, OnInit {
   userLogged: any;
-  registrationUser: RegistrationUser;
+  submitted: boolean;
+  userform: FormGroup;
   constructor(
     public userRegistration: UserRegistrationService,
+    private fb: FormBuilder,
+    public router: RouterExtensions
   ) {
-    this.registrationUser = new RegistrationUser();
+    this.formUserBuilder();
   }
 
   ngOnInit() {
+    this.submitted = false;
   }
 
-  onRegister() {
-    console.log(this.registrationUser);
-    if (this.registrationUser.password == this.registrationUser.confirmpassword) {
-      this.userRegistration.register(this.registrationUser, this);
-    } else {
-      alert("As senhas não são identicas!!!");
-    };
-    //this.nav.setRoot(HomePage);
+  signUpUser() {
+    this.submitted = true;
+    this.userLogged = this.userform.value;
+    this.userRegistration.register(this.userLogged, this);
+    this.submitted = false;
   }
 
   cognitoCallback(message: string, result: any) {
     if (message != null) { //error
-      console.log("Ops, algo de errado ocorreu! " + message)
+      let options = {
+        message: "Já existe um usuário cadastrado com esse e-mail!\nDesejar fazer login?",
+        cancelButtonText: "Não",
+        okButtonText: "Sim!"
+      };
+      // console.log("Ops, algo de errado ocorreu! " + message);
+      if (message = "An account with the given email already exists.") {
+        confirm(options).then((result: boolean) => {
+          if (result) {
+            this.router.navigate(["/login"]);
+          }
+        });
+      }
     } else { //success
-      console.log("in callback...result: " + result);
-      console.log(result);
+      // console.log("in callback...result: " + result);
+      // console.log(result);
       // this.userLogged = this.cognitoCustomAttrToJson(result.idToken.payload);
       alert("Registro iniciado! \nConfirmação de email encaminhada para " + result.codeDeliveryDetails.Destination);
+      this.formUserBuilder();
+      this.submitted = false;
+      this.router.navigate(["/login"]);
     }
   }
 
@@ -44,6 +64,24 @@ export class RegistrationComponent implements CognitoCallback, OnInit {
     var jsonData = JSON.stringify(payload);
     jsonData = jsonData.replace(new RegExp('custom:', 'g'), '');
     return JSON.parse(jsonData);
+  }
+
+  private formUserBuilder(): void {
+    this.userform = this.fb.group({
+      name: [null, [Validators.required]],
+      nickname: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(8)]],
+      confirmpassword: [null, [Validators.required, Validators.minLength(8)]],
+    }, { validator: this.passwordValidator });
+  }
+
+  public passwordValidator(form: FormGroup): void {
+    if (form.get('password').value === form.get('confirmpassword').value && !form.get('confirmpassword').errors) {
+      form.get('confirmpassword').setErrors(null);
+    } else {
+      form.get('confirmpassword').setErrors({ 'mismatch': true });
+    }
   }
 
 }

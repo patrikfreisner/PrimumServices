@@ -1,10 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { alert, AlertOptions } from "tns-core-modules/ui/dialogs";
-import { formatDate } from '@angular/common';
+import { confirm } from "tns-core-modules/ui/dialogs";
 
 import { UserLoginService } from "../services/user-login.service";
 import { RouterExtensions } from "nativescript-angular";
 import { CognitoService } from "../services/cognito.service";
+
+import * as application from "tns-core-modules/application";
+import { AndroidApplication, AndroidActivityBackPressedEventData, exitEvent } from "tns-core-modules/application";
+import { isAndroid } from "tns-core-modules/platform";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "Home",
@@ -15,38 +19,26 @@ export class HomeComponent implements OnInit {
     constructor(
         public userLoginService: UserLoginService,
         public cUtil: CognitoService,
-        public router: RouterExtensions
+        public routerEx: RouterExtensions,
+        public router: Router
     ) { }
 
     ngOnInit(): void {
         this.currentUser = this.cUtil.getUserData();
         console.log(this.currentUser);
+
+        if (!isAndroid) {
+            return;
+        }
+        application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
+            if (this.router.isActive("/home", false)) {
+                data.cancel = true; // prevents default back button behavior
+            }
+        });
     }
 
     logout() {
         this.userLoginService.logout();
-        this.router.navigate(["/login"], { clearHistory: true });
-    }
-
-    alertOptions: AlertOptions = {
-        title: "Confirme sua escolha!",
-        message: "Você deseja iniciar seu trabalho em " + this.jobName + "?",
-        okButtonText: "OK",
-        cancelable: true // [Android only] Gets or sets if the dialog can be canceled by taping outside of the dialog.
-    };
-
-    alertOptionsInit: AlertOptions = {
-        title: "Bom Trabalho... :)",
-        message: "Você iniciou as " + formatDate(new Date(), 'HH:mm', 'en'),
-        okButtonText: "OK",
-        cancelable: false // [Android only] Gets or sets if the dialog can be canceled by taping outside of the dialog.
-    };
-
-    onTapTest() {
-        alert(this.alertOptions).then(
-            () => {
-                alert(this.alertOptionsInit);
-            }
-        );
+        this.routerEx.navigate(["/login"], { clearHistory: true });
     }
 }

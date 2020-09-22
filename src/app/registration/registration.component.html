@@ -19,29 +19,47 @@
         <GridLayout row="9">
             <label text="Primum Tecnologia - 2020" style="color: white;"></label>
         </GridLayout> -->
-        <StackLayout class="form loginInput" row="5" rowspan="2">
+        <StackLayout [formGroup]="userform" class="form loginInput" row="5" rowspan="2">
             <StackLayout class="input-field m-t-15">
-                <TextField class="input" hint="Digite o Login" autocorrect="false" lineHeight="25" keyboardType="email"
-                [(ngModel)]='registrationUser.email'>
+                <TextField class="input" hint="Digite seu email" autocorrect="false" lineHeight="25"
+                    keyboardType="email"
+                    [class.hasError]="userform.get('email').errors && userform.get('email').touched"
+                    [class.hasSuccess]="userform.get('email').valid" formControlName="email">
                 </TextField>
             </StackLayout>
             <StackLayout class="input-field m-t-15">
-                <TextField class="input" hint="Digite sua senha" secure="true" [(ngModel)]="registrationUser.password">
+                <Label style="margin-left: 5%;"
+                    *ngIf="userform.get('password').hasError('minlength') && !userform.get('password').hasError('required') && userform.get('password').touched"
+                    text="Deve conter mais de 8 caracteres!!"></Label>
+                <TextField class="input" hint="Digite sua senha" secure="true" formControlName="password"
+                    [class.hasError]="userform.get('password').errors && userform.get('password').touched"
+                    [class.hasSuccess]="userform.get('password').valid" required>
                 </TextField>
             </StackLayout>
             <StackLayout class="input-field m-t-15">
-                <TextField class="input" hint="Confirme sua senha" secure="true" [(ngModel)]="registrationUser.confirmpassword">
+                <Label style="margin-left: 5%;"
+                    *ngIf="userform.get('confirmpassword').hasError('mismatch') && userform.get('confirmpassword').touched"
+                    text="Senhas não conferem!"></Label>
+                <TextField class="input" hint="Confirme sua senha" secure="true" formControlName="confirmpassword"
+                    [class.hasError]="(userform.get('confirmpassword').errors || userform.get('confirmpassword').hasError('required')) && userform.get('confirmpassword').touched"
+                    [class.hasSuccess]="(userform.get('confirmpassword').valid && !userform.get('confirmpassword').hasError('required')) && userform.get('confirmpassword').touched"
+                    required>
                 </TextField>
             </StackLayout>
             <StackLayout class="input-field m-t-15">
-                <TextField class="input" hint="Digite seu nome" autocorrect="false" [(ngModel)]="registrationUser.name">
+                <TextField class="input" hint="Digite seu nome" autocorrect="true" formControlName="name"
+                    [class.hasError]="userform.get('name').errors && userform.get('name').touched"
+                    [class.hasSuccess]="userform.get('name').valid" required>
                 </TextField>
             </StackLayout>
             <StackLayout class="input-field m-t-15">
                 <TextField class="input" hint="Digite seu nome de usuario Primum!" autocorrect="false"
-                [(ngModel)]="registrationUser.nickname"></TextField>
+                    formControlName="nickname"
+                    [class.hasError]="userform.get('nickname').errors && userform.get('nickname').touched"
+                    [class.hasSuccess]="userform.get('nickname').valid" required></TextField>
             </StackLayout>
-            <Button text="Registrar" (tap)="onRegister()" class="btn btn-primary"></Button>
+            <Button text="Registrar" (tap)="signUpUser()" isEnabled="{{userform.valid || !submitted}}"
+                class="btn btn-primary"></Button>
         </StackLayout>
     </GridLayout>
 </ScrollView>
