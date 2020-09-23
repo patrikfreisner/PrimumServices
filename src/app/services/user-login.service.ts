@@ -49,7 +49,7 @@ export class UserLoginService {
 
     cognitoUser.forgotPassword({
       onSuccess: function (result) {
-
+        console.log(result);
       },
       onFailure: function (err) {
         callback.cognitoCallback(err.message, null);

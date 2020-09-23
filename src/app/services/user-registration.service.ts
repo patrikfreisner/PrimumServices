@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CognitoCallback, CognitoService, RegistrationUser } from "./cognito.service";
 
-import { CognitoUserAttribute } from "amazon-cognito-identity-js/dist/amazon-cognito-identity";
+import { CognitoUserAttribute, CognitoUser } from "amazon-cognito-identity-js/dist/amazon-cognito-identity";
 
 declare let AWS: any;
 // declare let AWSCognito: any;
@@ -46,38 +46,38 @@ export class UserRegistrationService {
 
   }
 
-  // confirmRegistration(username: string, confirmationCode: string, callback: CognitoCallback): void {
+  confirmRegistration(username: string, confirmationCode: string, callback: CognitoCallback): void {
 
-  //   let userData = {
-  //     Username: username,
-  //     Pool: this.cUtil.getUserPool()
-  //   };
+    let userData = {
+      Username: username,
+      Pool: this.cUtil.getUserPool()
+    };
 
-  //   let cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+    let cognitoUser = new CognitoUser(userData);
 
-  //   cognitoUser.confirmRegistration(confirmationCode, true, function (err, result) {
-  //     if (err) {
-  //       callback.cognitoCallback(err.message, null);
-  //     } else {
-  //       callback.cognitoCallback(null, result);
-  //     }
-  //   });
-  // }
+    cognitoUser.confirmRegistration(confirmationCode, true, function (err, result) {
+      if (err) {
+        callback.cognitoCallback(err.message, null);
+      } else {
+        callback.cognitoCallback(null, result);
+      }
+    });
+  }
 
-  // resendCode(username: string, callback: CognitoCallback): void {
-  //   let userData = {
-  //     Username: username,
-  //     Pool: this.cUtil.getUserPool()
-  //   };
+  resendCode(username: string, callback: CognitoCallback): void {
+    let userData = {
+      Username: username,
+      Pool: this.cUtil.getUserPool()
+    };
 
-  //   let cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+    let cognitoUser = new CognitoUser(userData);
 
-  //   cognitoUser.resendConfirmationCode(function (err, result) {
-  //     if (err) {
-  //       callback.cognitoCallback(err.message, null);
-  //     } else {
-  //       callback.cognitoCallback(null, result);
-  //     }
-  //   });
-  // }
+    cognitoUser.resendConfirmationCode(function (err, result) {
+      if (err) {
+        callback.cognitoCallback(err.message, null);
+      } else {
+        callback.cognitoCallback(null, result);
+      }
+    });
+  }
 }

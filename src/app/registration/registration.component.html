@@ -58,7 +58,7 @@
                     [class.hasError]="userform.get('nickname').errors && userform.get('nickname').touched"
                     [class.hasSuccess]="userform.get('nickname').valid" required></TextField>
             </StackLayout>
-            <Button text="Registrar" (tap)="signUpUser()" isEnabled="{{userform.valid || !submitted}}"
+            <Button text="Registrar" (tap)="signUpUser()" isEnabled="{{userform.valid && !submitted}}"
                 class="btn btn-primary"></Button>
         </StackLayout>
     </GridLayout>

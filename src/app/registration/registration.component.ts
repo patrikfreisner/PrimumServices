@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular';
 
 import { confirm } from "tns-core-modules/ui/dialogs";
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'ns-registration',
@@ -25,13 +26,13 @@ export class RegistrationComponent implements CognitoCallback, OnInit {
 
   ngOnInit() {
     this.submitted = false;
+
   }
 
   signUpUser() {
     this.submitted = true;
     this.userLogged = this.userform.value;
     this.userRegistration.register(this.userLogged, this);
-    this.submitted = false;
   }
 
   cognitoCallback(message: string, result: any) {
@@ -41,7 +42,6 @@ export class RegistrationComponent implements CognitoCallback, OnInit {
         cancelButtonText: "Não",
         okButtonText: "Sim!"
       };
-      // console.log("Ops, algo de errado ocorreu! " + message);
       if (message = "An account with the given email already exists.") {
         confirm(options).then((result: boolean) => {
           if (result) {
@@ -50,14 +50,11 @@ export class RegistrationComponent implements CognitoCallback, OnInit {
         });
       }
     } else { //success
-      // console.log("in callback...result: " + result);
-      // console.log(result);
-      // this.userLogged = this.cognitoCustomAttrToJson(result.idToken.payload);
       alert("Registro iniciado! \nConfirmação de email encaminhada para " + result.codeDeliveryDetails.Destination);
       this.formUserBuilder();
-      this.submitted = false;
       this.router.navigate(["/login"]);
     }
+    this.submitted = false;
   }
 
   cognitoCustomAttrToJson(payload) {

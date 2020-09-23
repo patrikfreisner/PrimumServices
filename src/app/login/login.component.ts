@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterExtensions } from "nativescript-angular/router";
 import * as utilsModule from "tns-core-modules/utils/utils";
 import { alert } from "tns-core-modules/ui/dialogs";
+import { confirm } from "tns-core-modules/ui/dialogs";
 
 import { CognitoCallback, LoggedInCallback, CognitoService, LoginUser } from "../services/cognito.service";
 import { UserLoginService } from "../services/user-login.service";
+import { UserRegistrationService } from '../services/user-registration.service';
 
 @Component({
   selector: 'ns-login',
@@ -20,6 +22,7 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
   constructor(
     private routerExtensions: RouterExtensions,
     public userLoginService: UserLoginService,
+    public userRegistration: UserRegistrationService,
     private cUtil: CognitoService,
   ) {
     this.loginUser = new LoginUser();
@@ -63,7 +66,26 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
           okButtonText: "OK"
         };
         alert(options);
+      } else if (message == "User is not confirmed.") {
+        let options = {
+          message: "Você ainda não confirmou seu email!\nEnviar e-mail de confirmação novamente?",
+          okButtonText: "Sim!",
+          cancelButtonText: "Não, obrigado."
+        };
+        confirm(options).then((result: boolean) => {
+          if (result) {
+            this.userRegistration.resendCode(this.loginUser.email, this);
+          }
+        });
+      } else {
+        let options = {
+          title: "Ops! :(",
+          message: "Um erro inesperado ocorreu!!!\nTente mais tarde, caso o erro ocorra com certa frequencia contate o adminstrador do sistema!",
+          okButtonText: "OK"
+        };
+        alert(options);
       }
+
       this.isBusy = false;
     } else {
       this.userLogged = result.idToken.payload;
