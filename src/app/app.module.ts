@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { FindJobsComponent } from './find-jobs/find-jobs.component';
 import { FindJobDetailsComponent } from './find-job-details/find-job-details.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { SubscribeCustomerComponent } from './subscribe-customer/subscribe-customer.component';
 
 @NgModule({
     bootstrap: [
@@ -28,7 +29,8 @@ import { RegistrationComponent } from './registration/registration.component';
         LoginComponent,
         FindJobsComponent,
         FindJobDetailsComponent,
-        RegistrationComponent
+        RegistrationComponent,
+        SubscribeCustomerComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

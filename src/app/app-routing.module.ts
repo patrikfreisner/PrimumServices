@@ -7,17 +7,20 @@ import { FindJobsComponent } from "./find-jobs/find-jobs.component";
 import { FindJobDetailsComponent } from "./find-job-details/find-job-details.component";
 import { RegistrationComponent } from "./registration/registration.component";
 import { AuthenticatedGuard } from "./services/authenticated.guard";
-import { NonAuthenticatedGuard } from "./services/non-authenticated.guard";
+import { SubscribeCustomerComponent } from "./subscribe-customer/subscribe-customer.component";
 
 const routes: Routes = [
     {
-        path: "", redirectTo: "/home", pathMatch: "full"
+        path: "", redirectTo: "/subscustomer", pathMatch: "full"
     },
     {
         path: "login", component: LoginComponent
     },
     {
         path: "registration", component: RegistrationComponent
+    },
+    {
+        path: "subscustomer", component: SubscribeCustomerComponent
     },
     {
         path: "home", component: HomeComponent, canActivate: [AuthenticatedGuard]

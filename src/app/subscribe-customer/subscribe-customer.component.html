@@ -1,0 +1,55 @@
+<ActionBar id="MainActionBar" title="PrimumServices" class="p-t-1 p-b-1">
+    <StackLayout orientation="horizontal">
+        <Image src="https://patrikfreisner.github.io/primum_mainpage/white_logo.png" class="action-image m-r-5"
+            width="25" height="25"></Image>
+        <!-- <Label id="MainLabelId" text="PrimumServices!" class="h3"></Label> -->
+    </StackLayout>
+</ActionBar>
+<ScrollView height="100%">
+    <GridLayout columns="*" rows="*, *, *, *, *, *, *" style="background-color: black;">
+        <ActivityIndicator rowSpan="7" color="red" [busy]="onProccess" width="100" height="100"></ActivityIndicator>
+        <StackLayout row="4">
+            <Label class="h3" textAlignment="center" text="Bem vindo ao registro de novos usuarios Primum!"
+                style="color: white;"></Label>
+        </StackLayout>
+        <StackLayout class="form loginInput" row="5" rowspan="2">
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite seu email" autocorrect="false" lineHeight="25"
+                    keyboardType="email">
+                </TextField>
+            </StackLayout>
+            <!-- <StackLayout class="input-field m-t-15">
+                <Label style="margin-left: 5%;"
+                    *ngIf="userform.get('password').hasError('minlength') && !userform.get('password').hasError('required') && userform.get('password').touched"
+                    text="Deve conter mais de 8 caracteres!!"></Label>
+                <TextField class="input" hint="Digite sua senha" secure="true" formControlName="password"
+                    [class.hasError]="userform.get('password').errors && userform.get('password').touched"
+                    [class.hasSuccess]="userform.get('password').valid" required>
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <Label style="margin-left: 5%;"
+                    *ngIf="userform.get('confirmpassword').hasError('mismatch') && userform.get('confirmpassword').touched"
+                    text="Senhas não conferem!"></Label>
+                <TextField class="input" hint="Confirme sua senha" secure="true" formControlName="confirmpassword"
+                    [class.hasError]="(userform.get('confirmpassword').errors || userform.get('confirmpassword').hasError('required')) && userform.get('confirmpassword').touched"
+                    [class.hasSuccess]="(userform.get('confirmpassword').valid && !userform.get('confirmpassword').hasError('required')) && userform.get('confirmpassword').touched"
+                    required>
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite seu nome" autocorrect="true" formControlName="name"
+                    [class.hasError]="userform.get('name').errors && userform.get('name').touched"
+                    [class.hasSuccess]="userform.get('name').valid" required>
+                </TextField>
+            </StackLayout>
+            <StackLayout class="input-field m-t-15">
+                <TextField class="input" hint="Digite seu nome de usuario Primum!" autocorrect="false"
+                    formControlName="nickname"
+                    [class.hasError]="userform.get('nickname').errors && userform.get('nickname').touched"
+                    [class.hasSuccess]="userform.get('nickname').valid" required></TextField>
+            </StackLayout> -->
+            <Button text="Registrar" (tap)="signUpUser()" class="btn btn-primary"></Button>
+        </StackLayout>
+    </GridLayout>
+</ScrollView>
