@@ -11,7 +11,7 @@ import { SubscribeCustomerComponent } from "./subscribe-customer/subscribe-custo
 
 const routes: Routes = [
     {
-        path: "", redirectTo: "/subscustomer", pathMatch: "full"
+        path: "", redirectTo: "/home", pathMatch: "full"
     },
     {
         path: "login", component: LoginComponent

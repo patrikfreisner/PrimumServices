@@ -4,6 +4,7 @@
             width="25" height="25"></Image>
         <!-- <Label id="MainLabelId" text="PrimumServices!" class="h3"></Label> -->
     </StackLayout>
+    <ActionItem *ngIf="userHasAvoidedCustomerForm" (tap)="goToRegister()" style="background-color: yellow;" android.systemIcon="stat_sys_warning" text="delete"></ActionItem>
 </ActionBar>
 <BottomNavigation class="page">
     <TabContentItem>

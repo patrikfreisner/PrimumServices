@@ -9,6 +9,7 @@ import * as application from "tns-core-modules/application";
 import { AndroidApplication, AndroidActivityBackPressedEventData, exitEvent } from "tns-core-modules/application";
 import { isAndroid } from "tns-core-modules/platform";
 import { Router } from "@angular/router";
+import { HomeBehaviorService } from "../services/home-behavior.service";
 
 @Component({
     selector: "Home",
@@ -16,8 +17,10 @@ import { Router } from "@angular/router";
 })
 export class HomeComponent implements OnInit {
     public currentUser: any;
+    public userHasAvoidedCustomerForm: boolean;
     constructor(
         public userLoginService: UserLoginService,
+        public homeBehave: HomeBehaviorService,
         public cUtil: CognitoService,
         public routerEx: RouterExtensions,
         public router: Router
@@ -26,6 +29,7 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this.currentUser = this.cUtil.getUserData();
         console.log(this.currentUser);
+        this.userHasAvoidedCustomerForm = true;
 
         if (!isAndroid) {
             return;
@@ -35,6 +39,16 @@ export class HomeComponent implements OnInit {
                 data.cancel = true; // prevents default back button behavior
             }
         });
+
+        if ((this.currentUser.customer_fk_uuid == null || this.currentUser.customer_fk_uuid == '') && this.homeBehave.getUserHasAvoidedCustomerForm() != true) {
+            this.routerEx.navigate(["/subscustomer"]);
+        } else if (this.currentUser.customer_fk_uuid != null && this.currentUser.customer_fk_uuid != '') {
+            this.userHasAvoidedCustomerForm = false;
+        }
+    }
+
+    goToRegister() {
+        this.routerEx.navigate(["/subscustomer"]);
     }
 
     logout() {
