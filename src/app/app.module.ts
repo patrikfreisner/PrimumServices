@@ -11,17 +11,22 @@ import { FindJobsComponent } from './find-jobs/find-jobs.component';
 import { FindJobDetailsComponent } from './find-job-details/find-job-details.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { SubscribeCustomerComponent } from './subscribe-customer/subscribe-customer.component';
+import { HttpClientModule } from '@angular/common/http';
+import { InputMaskModule } from 'nativescript-input-mask/angular';
 
 @NgModule({
     bootstrap: [
         AppComponent
     ],
-    providers: [],
+    providers: [
+    ],
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
         AppRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientModule,
+        InputMaskModule
     ],
     declarations: [
         AppComponent,

@@ -12,7 +12,7 @@
 </ActionBar>
 <StackLayout style="background-color: black;">
     <StackLayout>
-        <Label class="h2" textAlignment="center" text="Olá Patrik Reisner." style="color: white;"></Label>
+        <Label class="h2" textAlignment="center" text="Olá {{currentCustomer.name}}." style="color: white;"></Label>
     </StackLayout>
     <StackLayout>
         <Label class="h3" text="Nós precisamos de mais algumas informações..." textWrap="true"
@@ -21,53 +21,75 @@
             style="color: white; text-align: center;"></Label>
     </StackLayout>
     <StackLayout [formGroup]="customerForm" class="form loginInput" height="60%">
-        <TabView [selectedIndex]="tabSelectedIndex" tabBackgroundColor="black" tabTextColor="white"
-            selectedTabTextColor="red">
+        <TabView #tabView [selectedIndex]="tabSelectedIndex" tabBackgroundColor="black" tabTextColor="white"
+            selectedTabTextColor="red" (selectedIndexChanged)="onSelectedIndexchanged(tabView.selectedIndex)">
             <StackLayout *tabItem="{title: 'Dados do Cliente'}">
                 <StackLayout class="input-field m-t-15">
-                    <TextField class="input" hint="Qual sua data de aniversário?" autocorrect="false" lineHeight="25"
-                        keyboardType="datetime" formControlName="birthdate">
-                    </TextField>
+                    <InputMask class="input" hint="Qual sua data de aniversário?" autocorrect="false" lineHeight="25"
+                        keyboardType="datetime" mask="[00]/[00]/[0000]"
+                        [class.hasError]="customerForm.get('birthdate').errors && customerForm.get('birthdate').touched"
+                        [class.hasSuccess]="customerForm.get('birthdate').valid" formControlName="birthdate">
+                    </InputMask>
+                    <!-- <TextField class="input" hint="Qual sua data de aniversário?" autocorrect="false" lineHeight="25"
+                        keyboardType="datetime"
+                        [class.hasError]="customerForm.get('birthdate').errors && customerForm.get('birthdate').touched"
+                        [class.hasSuccess]="customerForm.get('birthdate').valid" formControlName="birthdate">
+                    </TextField> -->
                 </StackLayout>
                 <StackLayout class="input-field m-t-15">
-                    <TextField class="input" hint="Nos informe qual gênero você se identifica?" autocorrect="false"
-                        lineHeight="25" formControlName="gender">
+                    <TextField class="input" (tap)="genderPicker()" hint="Nos informe qual gênero você se identifica?"
+                        autocorrect="false" lineHeight="25" formControlName="gender" editable="false">
                     </TextField>
+                    <!-- <ListPicker [items]="genders" selectedIndex="0" class="input"
+                        hint="Nos informe qual gênero você se identifica?" autocorrect="false" lineHeight="25"
+                        formControlName="gender"></ListPicker> -->
                 </StackLayout>
                 <StackLayout class="input-field m-t-15">
-                    <TextField class="input" hint="Seu CPF?" autocorrect="false" lineHeight="25" keyboardType="phone"
+                    <!-- <TextField class="input" hint="Seu CPF?" autocorrect="false" lineHeight="25" keyboardType="phone"
                         formControlName="personal_number">
-                    </TextField>
+                    </TextField> -->
+                    <InputMask class="input" hint="Seu CPF?" autocorrect="false" lineHeight="25" keyboardType="phone"
+                        formControlName="personal_number" mask="[000]{.}[000]{.}[000]{-}[00]"
+                        [class.hasError]="customerForm.get('personal_number').errors && customerForm.get('personal_number').touched"
+                        [class.hasSuccess]="customerForm.get('personal_number').valid">
+                    </InputMask>
                 </StackLayout>
                 <StackLayout class="input-field m-t-15">
-                    <TextField class="input" hint="Seu número de telefone?" autocorrect="false" lineHeight="25"
+                    <!-- <TextField class="input" hint="Seu número de telefone?" autocorrect="false" lineHeight="25"
                         keyboardType="phone" formControlName="phone">
-                    </TextField>
+                    </TextField> -->
+                    <InputMask class="input" hint="Seu número de telefone?" autocorrect="false" lineHeight="25"
+                        keyboardType="phone" formControlName="phone" mask="([00]) [0000]{-}[0000]"
+                        [class.hasError]="customerForm.get('phone').errors && customerForm.get('phone').touched"
+                        [class.hasSuccess]="customerForm.get('phone').valid">
+                    </InputMask>
                 </StackLayout>
             </StackLayout>
             <StackLayout *tabItem="{title: 'Endereço'}">
                 <StackLayout formGroupName="address">
-                    <StackLayout class="input-field m-t-15">
-                        <TextField class="input" hint="CEP" autocorrect="false" lineHeight="25"
-                            formControlName="zip_code">
-                        </TextField>
+                    <StackLayout class="input-field">
+                        <InputMask class="input" hint="CEP" autocorrect="false" lineHeight="25"
+                            formControlName="zip_code" mask="[00000]{-}[000]"
+                            [class.hasError]="customerForm.get('address.zip_code').errors && customerForm.get('address.zip_code').touched"
+                            [class.hasSuccess]="customerForm.get('address.zip_code').valid">
+                        </InputMask>
                     </StackLayout>
-                    <StackLayout class="input-field m-t-15">
+                    <StackLayout class="input-field">
                         <TextField class="input" hint="País" autocorrect="false" lineHeight="25"
                             formControlName="country">
                         </TextField>
                     </StackLayout>
-                    <StackLayout class="input-field m-t-15">
+                    <StackLayout class="input-field">
                         <TextField class="input" hint="Cidade" autocorrect="false" lineHeight="25"
                             formControlName="city">
                         </TextField>
                     </StackLayout>
-                    <StackLayout class="input-field m-t-15">
+                    <StackLayout class="input-field">
                         <TextField class="input" hint="Estado" autocorrect="false" lineHeight="25"
                             formControlName="state">
                         </TextField>
                     </StackLayout>
-                    <StackLayout class="input-field m-t-15">
+                    <StackLayout class="input-field">
                         <TextField class="input" hint="Bairro e Rua onde mora" autocorrect="false" lineHeight="25"
                             formControlName="street">
                         </TextField>
@@ -77,7 +99,8 @@
         </TabView>
     </StackLayout>
     <StackLayout>
-        <Button [text]="registerButtonText" (tap)="signUpUserInfo()" class="btn btn-primary"></Button>
+        <Button [text]="registerButtonText" (tap)="signUpUserInfo()" class="btn btn-primary"
+            disabled="{{true}}"></Button>
     </StackLayout>
     <StackLayout (tap)="dontRegister()" class="p-5">
         <Label class="h3 m-t-5" text="Não quero me registrar agora!" style="color: white; text-align: center;"></Label>

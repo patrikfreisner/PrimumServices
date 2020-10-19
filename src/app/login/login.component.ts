@@ -7,6 +7,7 @@ import { confirm } from "tns-core-modules/ui/dialogs";
 import { CognitoCallback, LoggedInCallback, CognitoService, LoginUser } from "../services/cognito.service";
 import { UserLoginService } from "../services/user-login.service";
 import { UserRegistrationService } from '../services/user-registration.service';
+import { AWSService } from '../services/AWS_API/aws.service';
 
 @Component({
   selector: 'ns-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
     private routerExtensions: RouterExtensions,
     public userLoginService: UserLoginService,
     public userRegistration: UserRegistrationService,
-    private cUtil: CognitoService,
+    private cUtil: CognitoService
   ) {
     this.loginUser = new LoginUser();
   }

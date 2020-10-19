@@ -3,7 +3,6 @@ import { _POOL_DATA } from "./properties.service";
 
 import { CognitoUserPool } from "amazon-cognito-identity-js/dist/amazon-cognito-identity";
 import { AWS } from "amazon-cognito-identity-js/lib";
-
 // declare let AWS: any;
 // declare let AWSCognito: any;
 
@@ -57,17 +56,32 @@ export class CognitoService {
 
   getUserData() {
     return this.getCurrentUser().getSession(function (err, session) {
-        if (err) {
-            console.log("Can't set the credentials:" + err);
-        } else {
-            if (session.isValid()) {
-                let data = JSON.stringify(session.idToken.payload);
-                data = JSON.parse(data.replace('custom:',''));
-                return data;
-            }
+      if (err) {
+        console.log("Can't set the credentials:" + err);
+      } else {
+        if (session.isValid()) {
+          let data = JSON.stringify(session.idToken.payload);
+          data = JSON.parse(data.replace('custom:', ''));
+          return data;
         }
+      }
     });
-}
+  }
+
+  getAuthToken(): string | boolean {
+    return this.getCurrentUser().getSession(
+      function (err, session) {
+        if (err) {
+          return false;
+        } else {
+          if (session.isValid()) {
+            return session.getIdToken().getJwtToken();
+            // return session.getAccessToken().getJwtToken();
+          }
+        }
+      }
+    );
+  }
 
   getAccessToken(callback: Callback): void {
     if (callback == null) {
@@ -77,9 +91,7 @@ export class CognitoService {
       if (err) {
         console.log("Can't set the credentials:" + err);
         callback.callbackWithParam(null);
-      }
-
-      else {
+      } else {
         if (session.isValid()) {
           callback.callbackWithParam(session.getAccessToken().getJwtToken());
         }

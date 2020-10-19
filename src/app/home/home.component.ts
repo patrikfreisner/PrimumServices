@@ -10,6 +10,8 @@ import { AndroidApplication, AndroidActivityBackPressedEventData, exitEvent } fr
 import { isAndroid } from "tns-core-modules/platform";
 import { Router } from "@angular/router";
 import { HomeBehaviorService } from "../services/home-behavior.service";
+import { AWSService } from "../services/AWS_API/aws.service";
+import { Customer } from "../Models/customer";
 
 @Component({
     selector: "Home",
@@ -23,12 +25,12 @@ export class HomeComponent implements OnInit {
         public homeBehave: HomeBehaviorService,
         public cUtil: CognitoService,
         public routerEx: RouterExtensions,
-        public router: Router
+        public router: Router,
+        private awsService: AWSService,
     ) { }
 
     ngOnInit(): void {
         this.currentUser = this.cUtil.getUserData();
-        console.log(this.currentUser);
         this.userHasAvoidedCustomerForm = true;
 
         if (!isAndroid) {
