@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CognitoService } from '../cognito.service';
 import { Observable } from 'rxjs';
-import * as AWS from 'aws-sdk/dist/aws-sdk';
+import { _POOL_DATA } from "../properties.service";
 import { Customer } from '~/app/Models/customer';
 
 @Injectable({
@@ -10,6 +10,7 @@ import { Customer } from '~/app/Models/customer';
 })
 export class AWSService {
   private httpUrl = "";
+  private baseUrl = "https://ur639cxhwf.execute-api.us-east-1.amazonaws.com/DEV/";
   constructor(
     private http: HttpClient,
     private authToken: CognitoService
@@ -25,6 +26,22 @@ export class AWSService {
       throw new Error("Authorization failed!!!!");
     }
 
+  }
+
+  createNewCustomer(customer: Customer): Observable<any> {
+    var custProp: any;
+    custProp = <any> customer
+    custProp.cognito_user = {
+      userPoolId: _POOL_DATA.UserPoolId,
+      userName: this.authToken.getCurrentUser().username
+    };
+    var authResult = this.authToken.getAuthToken();
+    if (authResult != false) {
+      const hValues = new HttpHeaders().set("Authorization", authResult.toString());
+      return this.http.post<any>(this.baseUrl + "customer", custProp, { headers: hValues });
+    } else {
+      throw new Error("Authorization failed!!!!");
+    }
   }
 
 }

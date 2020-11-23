@@ -11,6 +11,7 @@ export class Customer {
         lon: string;
         state: string;
         street: string;
+        neighborhood: string;
         zip_code: string;
         created_at: string;
         update_at: string;

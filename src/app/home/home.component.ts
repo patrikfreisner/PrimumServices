@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnChanges } from "@angular/core";
 import { confirm } from "tns-core-modules/ui/dialogs";
 
 import { UserLoginService } from "../services/user-login.service";
@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit {
         public cUtil: CognitoService,
         public routerEx: RouterExtensions,
         public router: Router,
-        private awsService: AWSService,
     ) { }
 
     ngOnInit(): void {
@@ -47,6 +46,10 @@ export class HomeComponent implements OnInit {
         } else if (this.currentUser.customer_fk_uuid != null && this.currentUser.customer_fk_uuid != '') {
             this.userHasAvoidedCustomerForm = false;
         }
+    }
+
+    updateCurrentUserData(): void {
+        this.currentUser = this.cUtil.getUserData();
     }
 
     goToRegister() {

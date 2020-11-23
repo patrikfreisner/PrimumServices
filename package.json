@@ -28,6 +28,7 @@
     "amazon-cognito-identity-js": "^3.2.1",
     "aws-sdk": "^2.600.0",
     "emitter": "0.0.5",
+    "jquery": "^3.5.1",
     "nativescript-angular": "~8.20.0",
     "nativescript-aws-cognito": "^1.0.8",
     "nativescript-input-mask": "^1.0.5",

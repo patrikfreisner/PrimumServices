@@ -31,6 +31,7 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
 
   ngOnInit() {
     this.isBusy = false;
+    this.userLoginService.authenticate("patrik.reisner@catolicasc.org.br", "@Patrikfr15", this);
   }
 
   onLogin() {
@@ -76,6 +77,20 @@ export class LoginComponent implements CognitoCallback, OnInit, LoggedInCallback
         confirm(options).then((result: boolean) => {
           if (result) {
             this.userRegistration.resendCode(this.loginUser.email, this);
+          }
+        });
+      } else if (message == "User is disabled.") {
+        let options = {
+          message: "Seu usuário foi desabilitado temporariamente pelo sistema, para solucionar o problema entre em contato com a equipe da Primum.\nNúmero (47) 99919-6385.",
+          okButtonText: "Enviar mensagem via Whatsapp!",
+          cancelButtonText: "Okay!"
+        };
+        confirm(options).then((result: boolean) => {
+          if (result) {
+            var opened = utilsModule.openUrl("whatsapp://send?phone=+5547999196385");
+            if (!opened) {
+              alert("Não foi possivel encontrar o Whatsapp no seu dispositivo.");
+            }
           }
         });
       } else {

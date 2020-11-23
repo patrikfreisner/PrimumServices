@@ -1,10 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { Customer } from '../Models/customer';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { action } from "tns-core-modules/ui/dialogs";
+import { action, alert } from "tns-core-modules/ui/dialogs";
 import { RouterExtensions } from 'nativescript-angular';
 import { HomeBehaviorService } from '../services/home-behavior.service';
 import { CognitoService } from '../services/cognito.service';
+
+import { Page } from 'tns-core-modules/ui/page';
+import { LocationService } from '../services/location.service';
+import { TabView } from 'tns-core-modules/ui/tab-view';
+import { AWSService } from '../services/AWS_API/aws.service';
+import { Customer } from '../Models/customer';
+import { HomeComponent } from '../home/home.component';
+import { UserRegistrationService } from '../services/user-registration.service';
+import { UserLoginService } from '../services/user-login.service';
 
 @Component({
   selector: 'ns-subscribe-customer',
@@ -12,17 +20,31 @@ import { CognitoService } from '../services/cognito.service';
   styleUrls: ['./subscribe-customer.component.css']
 })
 export class SubscribeCustomerComponent implements OnInit {
+
+  locationDataState: any[];
+  locationStateCity: any[];
+  cityChoice: string;
+  editableOn: boolean;
+
   public currentCustomer: any;
   public customerForm: any;
-  public tabSelectedIndex = 0;
+  public tabSelectedIndex: number;
   public registerButtonText = "Proxima pagina!";
   private genders: string[];
+
+
   constructor(
     private fb: FormBuilder,
     private userdata: CognitoService,
     private routerEx: RouterExtensions,
-    private homeBehave: HomeBehaviorService
-  ) { }
+    private homeBehave: HomeBehaviorService,
+    private apiLocation: LocationService,
+    private userLoginService: UserLoginService,
+    private awsApi: AWSService
+  ) {
+    this.editableOn = false;
+    this.tabSelectedIndex = 0;
+  }
 
   ngOnInit() {
     this.genders = ['Masculino', 'Feminino', 'Outros'];
@@ -38,8 +60,41 @@ export class SubscribeCustomerComponent implements OnInit {
     };
 
     action(options).then((result) => {
-      this.customerForm.patchValue({gender: result});
+      this.customerForm.patchValue({ gender: result });
     });
+  }
+
+  getCepValues(): void {
+    var cep = this.customerForm.get("address.zip_code").value;
+    if (cep != null && cep != "") {
+      cep = cep.replace("-", "");
+      if (cep.length >= 8) {
+        var valueToChange = cep.substring(0, 5) + "-" + cep.substring(5, 8)
+        this.customerForm.patchValue({ address: { zip_code: valueToChange } });
+        this.apiLocation.getCepInfo(cep).subscribe(
+          (cep) => {
+            if (cep.erro != true) {
+              this.customerForm.patchValue({
+                address: {
+                  country: "Brasil",
+                  city: cep.localidade,
+                  state: cep.uf,
+                  neighborhood: cep.bairro,
+                  street: cep.logradouro
+                }
+              });
+            } else {
+              alert("Não conseguimos pegar suas informações pelo CEP por favor digite!!!")
+              this.editableOn = true;
+            }
+          },
+          (erro) => {
+            alert("Não conseguimos pegar suas informações pelo CEP por favor digite!!!")
+            this.editableOn = true;
+          }
+        );
+      }
+    }
   }
 
   dontRegister(): void {
@@ -54,10 +109,28 @@ export class SubscribeCustomerComponent implements OnInit {
       this.customerForm.get("phone").valid)) {
       this.tabSelectedIndex = 1;
       this.registerButtonText = "Registrar minhas informações!";
-    } else if (this.tabSelectedIndex == 1) {
+    } else if (this.tabSelectedIndex == 1 && (
+      this.customerForm.get("address.city").valid &&
+      this.customerForm.get("address.country").valid && this.customerForm.get("address.state").valid &&
+      this.customerForm.get("address.street").valid && this.customerForm.get("address.zip_code").valid
+    )) {
       // Send to AWS;
       console.log("Start sending...");
-      console.log(this.customerForm.value);
+      this.awsApi.createNewCustomer(<Customer>this.customerForm.value).subscribe(
+        (success) => {
+          console.log(success);
+          this.routerEx.navigate(['home'], { clearHistory: true });
+          // alert("Muito obrigado!\nAgora está tudo certinho! :)");
+          this.homeBehave.setUserHasAvoidedCustomerForm(true);
+          alert("Precisavos que você faça login novamente para atualizar seus dados!\nObrigado!");
+          this.userLoginService.logout();
+          this.routerEx.navigate(["/login"], { clearHistory: true });
+        },
+        (error) => {
+          alert("Ops... Houve um erro, tente novamente mais tarde. :( ");
+          console.log(error);
+        }
+      );
     } else if (!this.customerForm.get("birthdate").valid ||
       !this.customerForm.get("gender").valid || !this.customerForm.get("personal_number").valid ||
       !this.customerForm.get("phone").valid) {
@@ -78,17 +151,20 @@ export class SubscribeCustomerComponent implements OnInit {
         lon: [null, [Validators.required]],
         state: [null, [Validators.required]],
         street: [null, [Validators.required]],
-        zip_code: [null, [Validators.required]],
+        neighborhood: [null, [Validators.required]],
+        zip_code: [null, [Validators.required, Validators.minLength(9)]],
       })
     });
   }
 
-  private onSelectedIndexchanged(event) {
-    this.tabSelectedIndex = event;
-    if (event == 0) {
-      this.registerButtonText = "Proxima pagina!";
-    } else {
+  private onSelectedIndexchanged(event: number) {
+    if (event == 1) {
+      this.registerButtonText = "Registrar minhas informações!";
+      this.tabSelectedIndex = 1;
       this.signUpUserInfo();
+    } else {
+      this.registerButtonText = "Proxima pagina!";
+      this.tabSelectedIndex = 0;
     }
   }
 }
